@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_flutter/base/base_page.dart';
 import 'package:quiz_flutter/pages/home_viewmodel.dart';
-import 'package:quiz_flutter/pages/quiz_page.dart';
+import 'package:quiz_flutter/pages/question/quiz_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -46,6 +46,6 @@ class _HomePageState extends State<HomePage> with MixinBasePage<HomeVM>{
 
   @override
   void initialise(BuildContext context) {
-    // TODO: implement initialise
+
   }
 }

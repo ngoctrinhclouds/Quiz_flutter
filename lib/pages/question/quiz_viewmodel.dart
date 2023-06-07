@@ -1,15 +1,26 @@
-class Question {
-  final String questionText;
-  final List<Answer> answersList;
+import 'package:dio/dio.dart';
+import 'package:quiz_flutter/base/base_viewmodel.dart';
 
-  Question(this.questionText, this.answersList);
-}
+import '../../models/answer_model.dart';
+import '../../models/question_model.dart';
+import '../../models/questions_modell.dart';
 
-class Answer {
-  final String answerText;
-  final bool isCorrect;
+class QuizVM extends BaseViewModel {
+  List<QuestionModel> listData = [];
+  List<Question> list = [];
 
-  Answer(this.answerText, this.isCorrect);
+  @override
+  void onInit() {
+    fetchDatAPIQuestion();
+  }
+
+  Future<void> fetchDatAPIQuestion() async {
+    try {
+      final response = api.questionService.getQuestionAll();
+    } on DioError catch (ex) {
+      print(ex);
+    }
+  }
 }
 
 List<Question> getQuestions() {
@@ -47,13 +58,13 @@ List<Question> getQuestions() {
   ));
 
   list.add(Question(
-      "Flutter is an open-source UI software development kit created by ______",
-      [
-        Answer("Apple", true),
-        Answer("Google", false),
-        Answer("Facebook", false),
-        Answer("Microsoft", false),
-      ],
+    "Flutter is an open-source UI software development kit created by ______",
+    [
+      Answer("Apple", true),
+      Answer("Google", false),
+      Answer("Facebook", false),
+      Answer("Microsoft", false),
+    ],
   ));
 
   list.add(Question(

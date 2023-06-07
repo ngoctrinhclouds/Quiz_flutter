@@ -10,11 +10,11 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:path/path.dart' as p;
 
 import '../../constants/constants.dart';
-import 'news_services.dart';
+import 'question_service.dart';
 
 class ApiClient {
   final dio = Dio();
-  late NewsService newServices;
+  late QuestionService questionService;
   var logger = Logger(
     printer: PrettyPrinter(
         methodCount: 2,
@@ -93,7 +93,7 @@ class ApiClient {
       ),
     );
 
-    newServices =
-        NewsService(dio, baseUrl: Constants.baseURL + Constants.versionAPI);
+    questionService =
+        QuestionService(dio, baseUrl: Constants.baseURL);
   }
 }

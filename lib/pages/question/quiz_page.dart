@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_flutter/base/base_page.dart';
 import 'package:quiz_flutter/pages/home_page.dart';
-import 'package:quiz_flutter/pages/question_viewmodel.dart';
+import 'package:quiz_flutter/pages/question/quiz_viewmodel.dart';
 
-import '../resources/app_color.dart';
+import '../../models/answer_model.dart';
+import '../../models/questions_modell.dart';
+import '../../resources/app_color.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({Key? key}) : super(key: key);
@@ -11,7 +14,8 @@ class QuizPage extends StatefulWidget {
   State<QuizPage> createState() => _QuizPageState();
 }
 
-class _QuizPageState extends State<QuizPage> {
+class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
+  QuizVM _provider = QuizVM();
   List<Question> questionList = getQuestions();
   int currentQuestionIndex = 0;
   int score = 0;
@@ -19,7 +23,7 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return builder(() => Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -72,7 +76,7 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   _answerList() {
@@ -173,15 +177,24 @@ class _QuizPageState extends State<QuizPage> {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black54),
+            style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                color: Colors.black54),
           ),
           Text(
             title1,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),
+            style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54),
           ),
           Text(
             "$score/${currentQuestionIndex + 1}",
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),
+            style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54),
           ),
         ],
       ),
@@ -204,4 +217,12 @@ class _QuizPageState extends State<QuizPage> {
       ),
     );
   }
+
+  @override
+  QuizVM create() {
+    return _provider;
+  }
+
+  @override
+  void initialise(BuildContext context) {}
 }

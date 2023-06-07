@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'news_services.dart';
+part of 'question_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'news_services.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _NewsService implements NewsService {
-  _NewsService(
+class _QuestionService implements QuestionService {
+  _QuestionService(
     this._dio, {
     this.baseUrl,
   });
@@ -19,25 +19,25 @@ class _NewsService implements NewsService {
   String? baseUrl;
 
   @override
-  Future<NewAllResponse> getNewAll() async {
+  Future<QuestionResponse> getQuestionAll() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<NewAllResponse>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<QuestionResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/news/all',
+              '/api.php?amount=5',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = NewAllResponse.fromJson(_result.data!);
+    final value = QuestionResponse.fromJson(_result.data!);
     return value;
   }
 
