@@ -22,61 +22,67 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
   Answer? selectedAnswer;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return builder(() => Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-              onPressed: () => const HomePage(), icon: const Icon(Icons.close))
-        ],
-      ),
-      backgroundColor: const Color.fromARGB(255, 5, 50, 80),
-      body: Center(
-        child: SafeArea(
-          child: Column(
-            children: [
-              Text.rich(
-                TextSpan(
-                  text: "Question ${currentQuestionIndex + 1}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4
-                      ?.copyWith(color: Colors.white),
-                  children: [
-                    TextSpan(
-                      text: "/${questionList.length.toString()}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: kDefaultPadding),
-              Container(
-                alignment: Alignment.center,
-                width: double.infinity,
-                padding: const EdgeInsets.all(32),
-                child: Text(
-                  questionList[currentQuestionIndex].questionText,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              _answerList(),
-              const SizedBox(height: kDefaultPadding),
-              _nextButton(),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              IconButton(
+                  onPressed: () => const HomePage(),
+                  icon: const Icon(Icons.close))
             ],
           ),
-        ),
-      ),
-    ));
+          backgroundColor: const Color.fromARGB(255, 5, 50, 80),
+          body: Center(
+            child: SafeArea(
+              child: Column(
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      text: "Question ${currentQuestionIndex + 1}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4
+                          ?.copyWith(color: Colors.white),
+                      children: [
+                        TextSpan(
+                          text: "/${questionList.length.toString()}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              ?.copyWith(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: kDefaultPadding),
+                  Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(32),
+                    child: Text(
+                      questionList[currentQuestionIndex].questionText,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  _answerList(),
+                  const SizedBox(height: kDefaultPadding),
+                  _nextButton(),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 
   _answerList() {
@@ -164,6 +170,10 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
   }
 
   _showScoreDialog() {
+    _provider.endTimeQuestion();
+    String timeQuestion =
+        _provider.calTotalTime(_provider.startTime, _provider.endTime);
+    print(timeQuestion);
     bool isPassed = false;
 
     if (score >= questionList.length * 0.6) {
@@ -185,14 +195,14 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
           Text(
             title1,
             style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.black54),
           ),
           Text(
-            "$score/${currentQuestionIndex + 1}",
+            "$score/${currentQuestionIndex + 1 } correct answers in $timeQuestion",
             style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.black54),
           ),
