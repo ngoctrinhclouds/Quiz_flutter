@@ -46,17 +46,19 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
                   Text.rich(
                     TextSpan(
                       text: "Question ${currentQuestionIndex + 1}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline4
-                          ?.copyWith(color: Colors.white),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                       children: [
                         TextSpan(
                           text: "/${questionList.length.toString()}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              ?.copyWith(color: Colors.white),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
@@ -68,10 +70,11 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
                     padding: const EdgeInsets.all(32),
                     child: Text(
                       questionList[currentQuestionIndex].questionText,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -103,11 +106,11 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
       width: MediaQuery.of(context).size.width * 0.9,
       margin: const EdgeInsets.symmetric(vertical: 8),
       height: 48,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: const StadiumBorder(),
-          primary: isSelected ? Colors.redAccent : Colors.white,
-          onPrimary: isSelected ? Colors.white : Colors.black,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),
+      border: Border.all(color: isSelected ? Colors.red : Colors.white)),
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          primary: isSelected ? Colors.red : Colors.white,
         ),
         onPressed: () {
           if (selectedAnswer == null) {
@@ -123,12 +126,20 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(answer.answerText),
-            Container(
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(color: Colors.grey)),
+            Theme(
+              data: ThemeData(unselectedWidgetColor: Colors.white,),
+              child: Checkbox(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                value: isSelected,
+                checkColor: Colors.red,
+                activeColor: const Color.fromARGB(255, 5, 50, 80),
+                onChanged: (value) {
+                  setState(() {
+                    isSelected = value!;
+                  });
+                },
+              ),
             ),
           ],
         ),
@@ -143,8 +154,8 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
     }
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.7,
-      height: 48,
+      width: MediaQuery.of(context).size.width * 0.8,
+      height: 46,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
@@ -164,7 +175,10 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
             });
           }
         },
-        child: Text(isLastQuestion ? "Submit" : "Next"),
+        child: Text(
+          isLastQuestion ? "Submit" : "Next",
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
@@ -188,7 +202,7 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
           Text(
             title,
             style: const TextStyle(
-                fontSize: 22,
+                fontSize: 23,
                 fontWeight: FontWeight.w600,
                 color: Colors.black54),
           ),
@@ -200,7 +214,7 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
                 color: Colors.black54),
           ),
           Text(
-            "$score/${currentQuestionIndex + 1 } correct answers in $timeQuestion",
+            "$score/${currentQuestionIndex + 1} correct answers in $timeQuestion",
             style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -210,10 +224,8 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
       ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.5,
-        height: 48,
+        height: 46,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shape: const StadiumBorder(), primary: Colors.redAccent),
           onPressed: () {
             Navigator.pop(context);
             setState(() {
@@ -222,7 +234,12 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
               selectedAnswer = null;
             });
           },
-          child: const Text("Play Again"),
+          style: ElevatedButton.styleFrom(
+              shape: const StadiumBorder(), primary: Colors.red),
+          child: const Text(
+            "Play Again",
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
         ),
       ),
     );

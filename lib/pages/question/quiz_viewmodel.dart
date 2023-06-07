@@ -35,7 +35,7 @@ class QuizVM extends BaseViewModel {
     int minutes = difference.inMinutes % 60;
     int seconds = difference.inSeconds % 60;
     return (hours == 0)
-        ? '${minutes}min $seconds sec'
+        ? '$minutes min $seconds sec'
         : (minutes == 0)
             ? '$seconds sec'
             : '${hours}hr $minutes min  $seconds sec';
