@@ -15,8 +15,6 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
-  QuizVM _provider = QuizVM();
-  List<Question> questionList = getQuestions();
   int currentQuestionIndex = 0;
   int score = 0;
   Answer? selectedAnswer;
@@ -34,8 +32,13 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
             elevation: 0,
             actions: [
               IconButton(
-                  onPressed: () => const HomePage(),
-                  icon: const Icon(Icons.close))
+                  onPressed: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomePage(),
+                        ),
+                      ),
+                  icon: const Icon(Icons.close)),
             ],
           ),
           backgroundColor: const Color.fromARGB(255, 5, 50, 80),
@@ -53,7 +56,7 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
                       ),
                       children: [
                         TextSpan(
-                          text: "/${questionList.length.toString()}",
+                          text: "/${provider.list.length.toString()}",
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -69,7 +72,7 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(32),
                     child: Text(
-                      questionList[currentQuestionIndex].questionText,
+                      provider.list.isNotEmpty ? provider.list[currentQuestionIndex].questionText :"" ,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
@@ -89,14 +92,15 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
   }
 
   _answerList() {
-    return Column(
-      children: questionList[currentQuestionIndex]
-          .answersList
-          .map(
-            (e) => _answerButton(e),
-          )
-          .toList(),
-    );
+    return provider.list.isEmpty
+        ? const SizedBox()
+        : Column(
+            children: provider.list[currentQuestionIndex].answersList
+                .map(
+                  (e) => _answerButton(e),
+                )
+                .toList(),
+          );
   }
 
   Widget _answerButton(Answer answer) {
@@ -106,8 +110,9 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
       width: MediaQuery.of(context).size.width * 0.9,
       margin: const EdgeInsets.symmetric(vertical: 8),
       height: 48,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),
-      border: Border.all(color: isSelected ? Colors.red : Colors.white)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: isSelected ? Colors.red : Colors.white)),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           primary: isSelected ? Colors.red : Colors.white,
@@ -125,9 +130,11 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(answer.answerText),
+            Text(answer.answerText, textAlign: TextAlign.start,),
             Theme(
-              data: ThemeData(unselectedWidgetColor: Colors.white,),
+              data: ThemeData(
+                unselectedWidgetColor: Colors.white,
+              ),
               child: Checkbox(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -149,7 +156,7 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
 
   _nextButton() {
     bool isLastQuestion = false;
-    if (currentQuestionIndex == questionList.length - 1) {
+    if (currentQuestionIndex == provider.list.length - 1) {
       isLastQuestion = true;
     }
 
@@ -184,13 +191,13 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
   }
 
   _showScoreDialog() {
-    _provider.endTimeQuestion();
+    provider.endTimeQuestion();
     String timeQuestion =
-        _provider.calTotalTime(_provider.startTime, _provider.endTime);
+        provider.calTotalTime(provider.startTime, provider.endTime);
     print(timeQuestion);
     bool isPassed = false;
 
-    if (score >= questionList.length * 0.6) {
+    if (score >= provider.list.length * 0.6) {
       //pass if 60 %
       isPassed = true;
     }
@@ -219,6 +226,7 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.black54),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -247,7 +255,7 @@ class _QuizPageState extends State<QuizPage> with MixinBasePage<QuizVM> {
 
   @override
   QuizVM create() {
-    return _provider;
+    return QuizVM();
   }
 
   @override
